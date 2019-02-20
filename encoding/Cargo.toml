@@ -1,0 +1,8 @@
+[package]
+name = "encoding"
+version = "0.1.0"
+authors = ["Nicolas Oury <Nicolas.Oury@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+encoding_derive = { path = "../encoding_derive"}

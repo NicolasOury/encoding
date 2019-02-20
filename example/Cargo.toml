@@ -1,0 +1,9 @@
+[package]
+name = "encoding_example"
+version = "0.1.0"
+authors = ["Nicolas Oury <Nicolas.Oury@gmail.com>"]
+edition = "2018"
+publish = false
+
+[dependencies]
+encoding = { path = "../encoding" }
