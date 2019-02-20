@@ -1,12 +1,11 @@
 use encoding::Encoding;
 
 #[derive(Encoding)]
-enum Toto<'a> {
-    A {x : &'a bool},
-    B {b: bool, c: bool},
-    C (bool, bool)
-}
+struct Toto (bool, bool);
 
 fn main() {
-    println!("{}",Toto::encoding_size().to_string());
+    let a = Toto (false, true);
+    println!("{} {:?}",Toto::encoding_size().to_string(),
+       a.encode()
+    );
 }
