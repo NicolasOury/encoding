@@ -1,3 +1,4 @@
+#![recursion_limit="128"]
 extern crate proc_macro2;
 extern crate proc_macro;
 extern crate syn;
@@ -218,5 +219,35 @@ fn add_trait_bounds(mut generics: Generics) -> Generics {
         }
     }
     generics
+}
+
+#[proc_macro]
+pub fn array_impl(n : proc_macro::TokenStream) -> proc_macro::TokenStream {
+    let n = TokenStream::from(n);
+    let res = quote!{
+        impl <T: Encoding> Encoding for [T; #n] {
+            fn encoding_size() -> usize {
+                #n * <T as Encoding>::encoding_size()
+            }
+            fn encode_into(&self, target : &mut [f64]) {
+                let size = <T as Encoding>::encoding_size();
+                for i in 0..#n {
+                    let target = &mut target[i * size .. i * size + size];
+                    self[i].encode_into(target);
+                }
+            }
+
+            fn likelihood(&self, source : & [f64]) -> f64 {
+                let size = <T as Encoding>::encoding_size();
+                let mut l = 1.0;
+                for i in 0..#n {
+                    let source = &source[i * size .. i * size + size];
+                    l *= self[i].likelihood(source);
+                };
+                l
+            }
+        }
+    };
+    proc_macro::TokenStream::from(res)
 }
 
